@@ -5,132 +5,103 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/24 14:09:12 by jyakdi            #+#    #+#             */
-/*   Updated: 2017/03/23 11:56:49 by jyakdi           ###   ########.fr       */
+/*   Created: 2019/09/07 15:37:35 by jyakdi            #+#    #+#             */
+/*   Updated: 2019/09/07 15:37:37 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_read		*create_elem(int fd, char *str, t_read *begin)
+/*
+** On verifie si ce fd a des restes d'un appel precedent a gnl
+*/
+
+static char		**check_fd(int fd, t_rest **save)
 {
-	t_read	*elem;
-	t_read	*tmp;
+	t_rest	*tmp;
 
-	if (!(elem = ft_memalloc(sizeof(t_read))))
-		return (NULL);
-	elem->fd = fd;
-	if (str != NULL)
-		elem->str = str;
-	elem->next = NULL;
-	tmp = begin;
-	if (tmp == NULL)
-		return (elem);
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = elem;
-	return (begin);
-}
-
-int			read_file(int fd, char **str)
-{
-	int		ret;
-	char	*buf;
-	char	*tmp;
-
-	ret = 1;
-	buf = ft_memalloc(BUFF_SIZE + 1);
-	while (!*str || (!(ft_strchr(*str, '\n')) && ret))
+	if (!save)
+		save = (t_rest**)malloc(sizeof(t_rest*));
+	else
 	{
-		ret = read(fd, buf, BUFF_SIZE);
-		if (ret == -1)
-			return (ret);
-		buf[ret] = 0;
-		if (!*str)
-			*str = ft_strdup(buf);
-		else
+		tmp = (*save);
+		while (tmp)
 		{
-			tmp = ft_strjoin(*str, buf);
-			ft_strdel(str);
-			*str = tmp;
+			if (tmp->fd == fd)
+				return (&tmp->restes);
+			tmp = tmp->next;
 		}
 	}
-	ft_strdel(&buf);
-	if (**str == '\0')
-		return (0);
-	return (1);
+	tmp = (t_rest*)malloc(sizeof(t_rest));
+	tmp->restes = ft_strnew(1);
+	tmp->fd = fd;
+	tmp->next = *save;
+	*save = tmp;
+	return (&tmp->restes);
 }
 
-char		*ft_register(int fd, char **str, t_read **elem, t_read **begin)
+/*
+** On fait un read sur le fd qu'on stock dans les restes correspondant au fd
+*/
+
+static int		read_fd(int fd, char **restes, char *line)
 {
 	int		i;
+	int		n;
+	short	stop;
 	char	*tmp;
-	char	*line;
 
-	i = 0;
-	while (*(*str + i) && *(*str + i) != '\n')
-		i++;
-	line = ft_strsub(*str, 0, i);
-	tmp = ft_strsub(*str, i + 1, ft_strlen(*str) - i);
-	if (tmp)
+	stop = 0;
+	n = 0;
+	line = (char*)ft_strnew(BUFF_SIZE);
+	while (stop == 0 && (n = read(fd, line, BUFF_SIZE)))
 	{
-		if (*elem)
-			(*elem)->str = ft_strdup(tmp);
-		else
-			*begin = create_elem(fd, ft_strdup(tmp), *begin);
-	}
-	else if (*elem)
-		(*elem)->str = NULL;
-	ft_strdel(str);
-	ft_strdel(&tmp);
-	return (line);
-}
-
-void		ft_listdel(t_read *begin, t_read *elem)
-{
-	t_read	*first;
-	t_read	*second;
-
-	if (ft_strcmp(elem->str, "\0") == 0)
-	{
-		if (begin->fd == elem->fd)
-			begin = elem->next;
-		else
+		i = 0;
+		while (n--)
 		{
-			first = begin;
-			while (first && first->fd != elem->fd)
-			{
-				second = first;
-				first = first->next;
-			}
-			second->next = first->next;
+			if (line[i] == '\n' || line[i] == '\0')
+				stop = 1;
+			i++;
 		}
-		ft_strdel(&elem->str);
-		free(elem);
+		line[i] = '\0';
+		tmp = *restes;
+		*restes = ft_strjoin(*restes, line);
+		free(tmp);
 	}
+	free(line);
+	return (n);
 }
 
-int			get_next_line(const int fd, char **line)
-{
-	static t_read	*begin = NULL;
-	t_read			*elem;
-	char			*str;
-	int				end;
+/*
+** On check d'abord si ce fd est deja stock et si oui est-ce qu'il a un \n
+** Sinon on cree les restes pour ce fd issus de reads jusqu'au 1er \n
+** VAR : inc = compteurs read, lenLine, s = tab de restesDesFD, rest = restFD
+*/
 
-	end = 1;
-	str = NULL;
-	elem = begin;
-	if (fd < 0 || !line)
+int				get_next_line(const int fd, char **line)
+{
+	int					i;
+	int					n;
+	static t_rest		*s;
+	char				*tmp;
+	char				**rest;
+
+	if (fd < 0 || line == NULL || read(fd, *line, 0) < 0)
 		return (-1);
-	while (elem && elem->fd != fd)
-		elem = elem->next;
-	if (elem)
-		str = elem->str;
-	end = read_file(fd, &str);
-	if (end == -1)
-		return (-1);
-	*line = ft_register(fd, &str, &elem, &begin);
-	if (end == 0 && elem)
-		ft_listdel(begin, elem);
-	return (end);
+	rest = check_fd(fd, &s);
+	if (ft_strchr(*rest, '\n') == NULL)
+	{
+		i = read_fd(fd, rest, *line);
+		if (i == 0 && ft_strlen(*rest) == 0)
+			return (0);
+	}
+	if (ft_strchr(*rest, '\n') != NULL)
+		n = (int)(ft_strchr(*rest, '\n') - *rest);
+	else
+		n = ft_strlen(*rest);
+	*line = ft_strsub(*rest, 0, n);
+	tmp = *rest;
+	*rest = ft_strsub(*rest, n + 1, ft_strlen(*rest) - ft_strlen(*line));
+	free(tmp);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 18:01:25 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/06 16:48:10 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/09/07 15:47:28 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	md5(int argc, char **argv)
 	t_elem	*begin;
 	
 	begin = NULL;
+	files = 0;
 	pFlag = 0;
 	qFlag = 0;
 	rFlag = 0;
@@ -33,13 +34,13 @@ void	md5(int argc, char **argv)
 	while (i < argc)
 	{
 		//ft_putendl(argv[i]);
-		if (ft_strcmp(argv[i], "-p") == 0)
+		if (files == 0 && ft_strcmp(argv[i], "-p") == 0)
 			pFlag++;
-		else if(ft_strcmp(argv[i], "-q") == 0)
+		else if (files == 0 && ft_strcmp(argv[i], "-q") == 0)
 			qFlag = 1;
-		else if(ft_strcmp(argv[i], "-r") == 0)
+		else if (files == 0 && ft_strcmp(argv[i], "-r") == 0)
 			rFlag = 1;
-		else if(ft_strcmp(argv[i], "-s") == 0)
+		else if (files == 0 && ft_strcmp(argv[i], "-s") == 0)
 		{
 			if (i + 1 < argc)
 			{
@@ -51,21 +52,23 @@ void	md5(int argc, char **argv)
 		else
 		{
 			files = 1;
-			ft_readFile(argv[i], begin);
+			if (!(begin = ft_readFile(argv[i], begin)))
+				return ;
+				//ft_putendl_fd("error", 2);
 		}
 		i++;
 	}
 	while (begin)
 	{
-		ft_putstr("testing -s strings : ");
+		ft_putstr("hashing string : ");
 		ft_putendl(begin->str);
 		begin = begin->next;
 	}
-	ft_putstr("pFlag = ");
+	/*ft_putstr("pFlag = ");
 	ft_putnbr(pFlag);
 	ft_putstr("\nqFlag = ");
 	ft_putnbr(qFlag);
 	ft_putstr("\nrFlag = ");
 	ft_putnbr(rFlag);
-	ft_putendl("");
+	ft_putendl("");*/
 }
