@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 18:01:25 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/10 11:40:35 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/09/17 14:05:10 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	md5(int argc, char **argv)
 	int qFlag;
 	int rFlag;
 	int	files;
-	t_elem	*begin;
 	
+	t_elem	*begin;
 	begin = NULL;
 	files = 0;
 	pFlag = 0;

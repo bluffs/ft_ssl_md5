@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/13 19:15:01 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/09/17 18:35:25 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-/*void	init_tab(int r[64], unsigned int k[64])
-{
-	int	i;
-
-	k = 0;
-	r = 0;
-}*/
-
-void	ft_padding(char *str)
+char	*ft_padding(char *str)
 {
 	char	*tmp;
 	int		i;
@@ -50,13 +42,12 @@ void	ft_padding(char *str)
 		tmp[i] = 0;
 		i++;
 	}
-	//tmp[i] = len & (0b11111111 << 24);
-	int n = 0;
-	while (n < len + nb + 7)
-	{
-		printf("%c\n", tmp[n]);
-		n++;
-	}
+	len *= 8;
+	tmp[i++] = (len >> 24) & 0xFF;
+	tmp[i++] = (len >> 16) & 0xFF;
+	tmp[i++] = (len >> 8) & 0xFF;
+	tmp[i++] = len & 0xFF;
+	return (tmp);
 }
 
 char	*ft_hash_md5(char *str)
@@ -75,27 +66,20 @@ char	*ft_hash_md5(char *str)
 	h1 = 0xEFCDAB89;
 	h2 = 0x98BADCFE;
 	h3 = 0x10325476;
-	printf("h0 = %x\n", h0);
-	printf("h1 = %x\n", h1);
-	printf("h2 = %x\n", h2);
-	printf("h3 = %x\n", h3);
-	//init_tab(r, k);
 	int	i;
 	i = 0;
 	while (i < 64)
 	{
 		k[i] = floor(fabs(sin(i + 1)) * pow(2, 32));
-		printf("%x\n", k[i]);
+		//printf("%x\n", k[i]);
 		i++;
 	}
-//	unsigned int nb = floor(fabs(sin(1) * pow(2, 32)));
-//	printf("TESTING : %x\n", nb);
-	i = 0;
-	/*while (i < 64)
+	str = ft_padding(str);
+	/*int n = 0;
+	while (n < 63)
 	{
-		printf("%d\n", r[i]);
-		i++;
+		printf("%c\n", str[n]);
+		n++;
 	}*/
-	ft_padding(str);
 	return (NULL);
 }
