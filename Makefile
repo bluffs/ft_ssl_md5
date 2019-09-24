@@ -1,5 +1,5 @@
 NAME = ft_ssl
-SRC = main.c tools.c ft_error.c ft_md5.c ft_md5_tools.c
+SRC = main.c tools.c ft_error.c ft_md5.c ft_md5_tools.c ft_md5_init.c
 OBJ = $(SRC:.c=.o)
 	LIBFT = libft/libft.a
 	CC = gcc

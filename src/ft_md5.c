@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 18:01:25 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/17 14:05:10 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/09/24 18:10:44 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	md5(int argc, char **argv)
 	}
 	while (begin)
 	{
-		ft_putstr("hashing string : ");
-		ft_putendl(begin->str);
+		//ft_putstr("hashing string : ");
+		//ft_putendl(begin->str);
 		ft_hash_md5(begin->str);
 		begin = begin->next;
 	}
