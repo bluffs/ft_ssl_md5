@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:07:26 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/24 16:06:30 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/09/30 10:53:05 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ typedef struct			s_var
 {
 	int				r[64];
 	unsigned int	k[64];
-	int				h0;
-	int				h1;
-	int				h2;
-	int				h3;
-	int				a;
-	int				b;
-	int				c;
-	int				d;
-	int				tmp;
+	unsigned int				h0;
+	unsigned int				h1;
+	unsigned int				h2;
+	unsigned int				h3;
+	unsigned int				a;
+	unsigned int				b;
+	unsigned int				c;
+	unsigned int				d;
+	unsigned int				tmp;
 }						t_var;
 
 typedef struct			s_elem

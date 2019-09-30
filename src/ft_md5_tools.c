@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/24 18:50:00 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/09/30 16:52:42 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ char	*ft_padding(char *str, int *size)
 		tmp[i] = str[i];
 		i++;
 	}
-	tmp[i++] = 0b1000000;
+	tmp[i++] = 0b10000000;
 	while (i < len + nb)
 		tmp[i++] = 0;
 	len *= 8;
-	tmp[i++] = (len >> 24) & 0xFF;
-	tmp[i++] = (len >> 16) & 0xFF;
+	tmp[i++] = (len >> 0) & 0xFF;
 	tmp[i++] = (len >> 8) & 0xFF;
-	tmp[i++] = len & 0xFF;
+	tmp[i++] = (len >> 16) & 0xFF;
+	tmp[i++] = (len >> 24) & 0xFF;
 	return (tmp);
 }
 
@@ -77,7 +77,17 @@ void	ft_operate(t_var *tab, char *str)
 	int		F;
 	int		g;
 
+	int u = 0;
+	while (u < 16)
+	{
+		printf("[%d] = %d\n", u, ((unsigned int *)str)[u]);
+		u++;
+	}
+
 	ft_chunk(str, m, tab);
+	printf("A = %d\n", (int)m[0]);
+	
+	//printf ("A = %u, B = %u, C = %u, D = %u\n", tab->a, tab->b, tab->c, tab->d);
 	i = 0;
 	while (i < 64)
 	{
@@ -102,18 +112,29 @@ void	ft_operate(t_var *tab, char *str)
 			g = (7 * i) % 16;
 		}
 		F = F + tab->a + tab->k[i] + (int)m[g];
-		tab->a = tab->d;
-		tab->d = tab->c;
-		tab->c = tab->b;
+		//if (i != 0 && i % 4 == 0)
+			//tab->a = tab->d;
+		//if (i != 0 && i % 4 == 1)
+			//tab->d = tab->c;
+		//if (i != 0 && i % 4 == 2)
+			//tab->c = tab->b;
+		//if (i != 0 && i % 4 == 3)
+			//tab->b += (F << g_var[i]) | (F >> (32 - g_var[i]));
 		// TODO try this then change the leftrotate function
-		tab->b = tab->b + (F << g_var[i]);
+		//tab->b = tab->b + (F << g_var[i]);
+		printf ("[i = %d] A = %u, B = %u, C = %u, D = %u\n", i, tab->a, tab->b, tab->c, tab->d);
 		i++;
 	}
+	// Testing the last part
+	//tab->a = 1713794056;
+	//tab->b = 2214950333;
+	//tab->c = 3935568332;
+	//tab->d = 3867267760;
 	tab->h0 = tab->h0 + tab->a;
 	tab->h1 = tab->h1 + tab->b;
 	tab->h2 = tab->h2 + tab->c;
 	tab->h3 = tab->h3 + tab->d;
-
+	printf("h0_Hex = %x, h1_Hex = %x, h2_Hex = %x, h3_Hex = %x\n", tab->h0, tab->h1, tab->h2, tab->h3);
 }
 
 char	*ft_hash_md5(char *str)
@@ -124,6 +145,13 @@ char	*ft_hash_md5(char *str)
 	int				i;
 	int				j;
 	
+	int u = 0;
+	/*while (u < 16)
+	{
+		printf("[%d] = %u\n", u, ((unsigned int *)str)[u]);
+		u++;
+	}*/
+
 	init_tab(&tab);
 	str = ft_padding(str, &size);
 	//printf("size of message after padding : %d\n", size);
