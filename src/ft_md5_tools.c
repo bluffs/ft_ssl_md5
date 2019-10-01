@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/30 16:52:42 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/01 17:10:17 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,29 @@ char	*ft_padding(char *str, int *size)
 	return (tmp);
 }
 
-void	ft_chunk(char *str, char m[16][4], t_var *tab)
+int		*ft_chunk(char *str, char m[16][4], t_var *tab)
 {
 	int	i;
 	int	j;
+	int	*test;
 
+	test = ft_memalloc(sizeof(int) * 16);
+	/*i = 0;
+	while (i < 16)
+	{
+		test[i] = ft_memalloc(5);
+		i++;
+	}*/
 	i = 0;
 	while (i < 16)
 	{
 		j = 0;
+		test[i] = 0;
 		while (j < 4)
 		{
-			m[i][j] = str[i * 4 + j];
+			//m[i][j] = str[i * 4 + j];
+			//printf("copying str[nb] = %c\n", str[i * 4 + j]);
+			test[i] = str[i * 4 + j] << (24 - (j * 8));
 			j++;
 		}
 		i++;
@@ -68,6 +79,7 @@ void	ft_chunk(char *str, char m[16][4], t_var *tab)
 	tab->b = tab->h1;
 	tab->c = tab->h2;
 	tab->d = tab->h3;
+	return (test);
 }
 
 void	ft_operate(t_var *tab, char *str)
@@ -76,20 +88,39 @@ void	ft_operate(t_var *tab, char *str)
 	int		i;
 	int		F;
 	int		g;
+	int		*test;
+	unsigned int	temp;
 
-	int u = 0;
+	/*int u = 0;
 	while (u < 16)
 	{
 		printf("[%d] = %d\n", u, ((unsigned int *)str)[u]);
 		u++;
-	}
+	}*/
 
-	ft_chunk(str, m, tab);
-	printf("A = %d\n", (int)m[0]);
+	test = ft_chunk(str, m, tab);
+	/*int nb = 0;
+	str[0] = 'a';
+	str[1] = 'b';
+	str[2] = 'c';
+	str[3] = 'd';
+
+	nb += str[0] << 24;
+	nb += str[1] << 16;
+	nb += str[2] << 8;
+	nb += str[3] << 0;
+	
+	printf("nb = %d\n", nb);*/
+	/*int n = 0;
+	while (n < 16)
+	{
+		printf("test[%d] = %d\n", n, test[n]);
+		n++;
+	}*/
 	
 	//printf ("A = %u, B = %u, C = %u, D = %u\n", tab->a, tab->b, tab->c, tab->d);
 	i = 0;
-	while (i < 64)
+	while (i < 4) // TODO change to 64
 	{
 		if (i < 16)
 		{
@@ -111,15 +142,15 @@ void	ft_operate(t_var *tab, char *str)
 			F = tab->c ^ (tab->b | ~(tab->d));
 			g = (7 * i) % 16;
 		}
-		F = F + tab->a + tab->k[i] + (int)m[g];
-		//if (i != 0 && i % 4 == 0)
-			//tab->a = tab->d;
-		//if (i != 0 && i % 4 == 1)
-			//tab->d = tab->c;
-		//if (i != 0 && i % 4 == 2)
-			//tab->c = tab->b;
-		//if (i != 0 && i % 4 == 3)
-			//tab->b += (F << g_var[i]) | (F >> (32 - g_var[i]));
+		//printf("b = %u, a = %u, c = %u, test[g] = %d, k[i] = %u, g_var[i] = %u\n", tab->b, tab->a, tab->c, test[g], tab->k[i], g_var[i]);
+		tab->a = tab->b + ((tab->a + ((tab->b & tab->c) | ((~(tab->b)) & tab->d)) + test[g] + tab->k[i]) << /*g_var[i]*/ 0);
+		//F = F + tab->a + tab->k[i] + test[g];
+		temp = tab->b;
+		tab->b = tab->a;
+		tab->a = tab->d;
+		tab->d = tab->c;
+		tab->c = temp;
+		//tab->b += (F << g_var[i]) | (F >> (32 - g_var[i]));
 		// TODO try this then change the leftrotate function
 		//tab->b = tab->b + (F << g_var[i]);
 		printf ("[i = %d] A = %u, B = %u, C = %u, D = %u\n", i, tab->a, tab->b, tab->c, tab->d);
@@ -145,8 +176,8 @@ char	*ft_hash_md5(char *str)
 	int				i;
 	int				j;
 	
-	int u = 0;
-	/*while (u < 16)
+	/*int u = 0;
+	while (u < 16)
 	{
 		printf("[%d] = %u\n", u, ((unsigned int *)str)[u]);
 		u++;
