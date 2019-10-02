@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/01 17:10:17 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/02 18:09:33 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int g_var[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
 	4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
 	6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-char	*ft_padding(char *str, int *size)
+unsigned char	*ft_padding(char *str, int *size)
 {
-	char	*tmp;
+	unsigned char	*tmp;
 	int		i;
 
 	int len = ft_strlen(str);
@@ -34,7 +34,7 @@ char	*ft_padding(char *str, int *size)
 	i = 0;
 	while (i < len)
 	{
-		tmp[i] = str[i];
+		tmp[i] = (unsigned char)(str[i]);
 		i++;
 	}
 	tmp[i++] = 0b10000000;
@@ -48,11 +48,11 @@ char	*ft_padding(char *str, int *size)
 	return (tmp);
 }
 
-int		*ft_chunk(char *str, char m[16][4], t_var *tab)
+unsigned int		*ft_chunk(unsigned char *str, t_var *tab)
 {
 	int	i;
 	int	j;
-	int	*test;
+	unsigned int	*test;
 
 	test = ft_memalloc(sizeof(int) * 16);
 	/*i = 0;
@@ -70,11 +70,18 @@ int		*ft_chunk(char *str, char m[16][4], t_var *tab)
 		{
 			//m[i][j] = str[i * 4 + j];
 			//printf("copying str[nb] = %c\n", str[i * 4 + j]);
-			test[i] = str[i * 4 + j] << (24 - (j * 8));
+			//printf("i = %d, j = %d, adding : %u\n", i, j, str[i * 4 + j]);
+			test[i] += str[i * 4 + j] << (j * 8);
 			j++;
 		}
 		i++;
 	}
+	/*int n = 0;
+	while (n < 16)
+	{
+		printf("test[%u] = %u\n", n, test[n]);
+		n++;
+	}*/
 	tab->a = tab->h0;
 	tab->b = tab->h1;
 	tab->c = tab->h2;
@@ -82,13 +89,12 @@ int		*ft_chunk(char *str, char m[16][4], t_var *tab)
 	return (test);
 }
 
-void	ft_operate(t_var *tab, char *str)
+void	ft_operate(t_var *tab, unsigned char *str)
 {
-	char	m[16][4];
 	int		i;
 	int		F;
 	int		g;
-	int		*test;
+	unsigned int	*test;
 	unsigned int	temp;
 
 	/*int u = 0;
@@ -98,7 +104,7 @@ void	ft_operate(t_var *tab, char *str)
 		u++;
 	}*/
 
-	test = ft_chunk(str, m, tab);
+	test = ft_chunk(str, tab);
 	/*int nb = 0;
 	str[0] = 'a';
 	str[1] = 'b';
@@ -120,7 +126,9 @@ void	ft_operate(t_var *tab, char *str)
 	
 	//printf ("A = %u, B = %u, C = %u, D = %u\n", tab->a, tab->b, tab->c, tab->d);
 	i = 0;
-	while (i < 4) // TODO change to 64
+	//printf("b = %u, ~c = %u, b & c = %u\n", tab->b, tab->c, (tab->b & tab->c));
+	unsigned int x = 0;
+	while (i < 64) // TODO change to 64
 	{
 		if (i < 16)
 		{
@@ -143,7 +151,14 @@ void	ft_operate(t_var *tab, char *str)
 			g = (7 * i) % 16;
 		}
 		//printf("b = %u, a = %u, c = %u, test[g] = %d, k[i] = %u, g_var[i] = %u\n", tab->b, tab->a, tab->c, test[g], tab->k[i], g_var[i]);
-		tab->a = tab->b + ((tab->a + ((tab->b & tab->c) | ((~(tab->b)) & tab->d)) + test[g] + tab->k[i]) << /*g_var[i]*/ 0);
+		//printf(" +\n%u\n", (tab->a + ((tab->b & tab->c) | ((~(tab->b)) & tab->d)) + test[g] + tab->k[i]));
+		x = ((tab->b & tab->c) | ((~(tab->b)) & tab->d));
+		//printf("x = %u\n", x);
+		//printf("a = %u, f = %u, k[i] = %u, w[g] = %u\n", tab->a, x, tab->k[i], test[g]);
+		//printf("test = %u\n", tab->b + (tab->a + F + test[g] + tab->k[i]));
+		x = (tab->a + F + test[g] + tab->k[i]);
+		tab->a = tab->b + ((x << g_var[i]) | (x >> (32 - g_var[i])));
+		//printf("tab->a = %u\n", tab->a);
 		//F = F + tab->a + tab->k[i] + test[g];
 		temp = tab->b;
 		tab->b = tab->a;
@@ -171,10 +186,11 @@ void	ft_operate(t_var *tab, char *str)
 char	*ft_hash_md5(char *str)
 {
 	int				size;
-	char			*tmp;
+	unsigned char			*tmp;
 	t_var			tab;
 	int				i;
 	int				j;
+	unsigned char	*str1;
 	
 	/*int u = 0;
 	while (u < 16)
@@ -184,7 +200,7 @@ char	*ft_hash_md5(char *str)
 	}*/
 
 	init_tab(&tab);
-	str = ft_padding(str, &size);
+	str1 = ft_padding(str, &size);
 	//printf("size of message after padding : %d\n", size);
 	//for each 512 bits (64 bytes) of the message, do the hashing rounds
 	i = 0;
@@ -197,7 +213,7 @@ char	*ft_hash_md5(char *str)
 		j = 0;
 		while (j < 64)
 		{
-			tmp[j] = str[i + j];
+			tmp[j] = str1[i + j];
 			j++;
 		}
 		i += 64;
