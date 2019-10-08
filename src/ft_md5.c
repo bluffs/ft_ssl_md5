@@ -6,70 +6,67 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 18:01:25 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/24 18:10:44 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/08 18:23:48 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
 
+void	ft_print_md5(char *str, char *hash, int flag)
+{
+	if (flag == 0)
+	{
+		ft_putstr("MD5 (\"");
+		ft_putstr(str);
+		ft_putstr("\") = ");
+		ft_putendl(hash);
+	}
+	else if (flag == 1)
+	{
+		ft_putstr(hash);
+		ft_putstr(" \"");
+		ft_putstr(str);
+		ft_putendl("\"");
+	}
+	else
+		ft_putendl(hash);
+}
+
 void	md5(int argc, char **argv)
 {
-	//if -p do it instantly
-	//read options (q r) for printing mode
-	//chained list with all strings and file contents
-	//if chained list is empty and no -p read on stdin
 	int	i;
-	int pFlag;
-	int qFlag;
-	int rFlag;
+	int	p_flag;
+	int	qr_flag;
 	int	files;
-	
-	t_elem	*begin;
-	begin = NULL;
+
 	files = 0;
-	pFlag = 0;
-	qFlag = 0;
-	rFlag = 0;
+	p_flag = 0;
+	qr_flag = 0;
 	i = 2;
 	while (i < argc)
 	{
-		//ft_putendl(argv[i]);
 		if (files == 0 && ft_strcmp(argv[i], "-p") == 0)
-			pFlag++;
+			p_flag++;
 		else if (files == 0 && ft_strcmp(argv[i], "-q") == 0)
-			qFlag = 1;
+			qr_flag = 2;
 		else if (files == 0 && ft_strcmp(argv[i], "-r") == 0)
-			rFlag = 1;
+			qr_flag = (qr_flag != 2) ? 1 : 2;
 		else if (files == 0 && ft_strcmp(argv[i], "-s") == 0)
 		{
 			if (i + 1 < argc)
 			{
-				//if there is an error on malloc return
-				if (!(begin = ft_create_elem(argv[++i], begin)))
-					return ;
+				i++;
+				ft_print_md5(argv[i], ft_hash_md5(argv[i], 0, 0), qr_flag);
 			}
+			else
+				ft_usage();
 		}
 		else
 		{
 			files = 1;
-			if (!(begin = ft_readFile(argv[i], begin)))
-				return ;
-				//ft_putendl_fd("error", 2);
+			//TODO not working
+			ft_print_md5(argv[i], ft_hash_md5(ft_read_file(argv[i]), 0, 0), qr_flag);
 		}
 		i++;
 	}
-	while (begin)
-	{
-		//ft_putstr("hashing string : ");
-		//ft_putendl(begin->str);
-		ft_hash_md5(begin->str);
-		begin = begin->next;
-	}
-	/*ft_putstr("pFlag = ");
-	ft_putnbr(pFlag);
-	ft_putstr("\nqFlag = ");
-	ft_putnbr(qFlag);
-	ft_putstr("\nrFlag = ");
-	ft_putnbr(rFlag);
-	ft_putendl("");*/
 }

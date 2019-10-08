@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:04:50 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/09/07 15:40:50 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/08 18:21:12 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-t_elem		*ft_readFile(char* file, t_elem *begin)
+char		*ft_read_file(char *file)
 {
-	//read file with GNL and create elem with the full content of the file
 	char		*str;
 	int			fd;
 	char		*str2;
@@ -41,7 +40,7 @@ t_elem		*ft_readFile(char* file, t_elem *begin)
 	}
 	if (str)
 		ft_strdel(&str);
-	return (ft_create_elem(str3, begin));
+	return (str3);
 }
 
 void		ft_do_cmd(int argc, char **argv)
@@ -49,7 +48,6 @@ void		ft_do_cmd(int argc, char **argv)
 	if (ft_strcmp(argv[1], "md5") == 0)
 	{
 		md5(argc, argv);
-		//ft_putendl("gonna hash with md5");
 	}
 	else
 	{
@@ -57,7 +55,7 @@ void		ft_do_cmd(int argc, char **argv)
 	}
 }
 
-t_elem*		ft_create_elem(char *str, t_elem *begin)
+t_elem		*ft_create_elem(char *str, t_elem *begin)
 {
 	t_elem	*elem;
 	t_elem	*tmp;
@@ -72,4 +70,12 @@ t_elem*		ft_create_elem(char *str, t_elem *begin)
 		tmp = tmp->next;
 	tmp->next = elem;
 	return (begin);
+}
+
+char		ft_itoh(unsigned int nb)
+{
+	char *str;
+
+	str = "0123456789abcdef";
+	return (str[nb]);
 }
