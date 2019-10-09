@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:04:50 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/08 18:21:12 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/09 17:06:58 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-char		*ft_read_file(char *file)
+int			ft_read_file(char *file, char **finalstr)
 {
 	char		*str;
 	int			fd;
@@ -23,24 +26,26 @@ char		*ft_read_file(char *file)
 	char		*str3;
 
 	str3 = NULL;
+	str2 = NULL;
+	if (!(str = ft_memalloc(2)))
+		exit(0);
 	if ((fd = open(file, O_RDONLY)) <= 0)
-		return (NULL);
-	while (get_next_line(fd, &str) > 0)
+	{
+		ft_no_file(file);
+		return (0);
+	}
+	while (read(fd, str, 1) > 0)
 	{
 		str2 = str3;
-		if (str2)
-		{
-			str3 = ft_strjoin(str2, "\n");
-			ft_strdel(&str2);
-			str2 = str3;
-		}
 		str3 = ft_strjoin(str2, str);
 		if (str2)
 			ft_strdel(&str2);
 	}
-	if (str)
-		ft_strdel(&str);
-	return (str3);
+	ft_strdel(&str);
+	if (str2)
+		ft_strdel(&str2);
+	*finalstr = str3;
+	return (1);
 }
 
 void		ft_do_cmd(int argc, char **argv)

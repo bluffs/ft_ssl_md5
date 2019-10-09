@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 17:37:27 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/08 17:42:47 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/09 15:49:57 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,18 @@ void	ft_error_cmd(char *str)
 	ft_putendl("Cipher commands:");
 }
 
-void	ft_usage(void)
+void	ft_usage(char c)
 {
-	ft_putendl_fd("usage: md5 [-pqr] [-s] [files ...]", 2);
+	ft_putstr_fd("md5: illegal option -- ", 2);
+	ft_putchar_fd(c, 2);
+	ft_putchar_fd('\n', 2);
+	ft_putendl_fd("usage: md5 [-pqr] [-s string] [files ...]", 2);
+}
+
+void	ft_no_file(char *file)
+{
+	ft_putstr_fd("MD5: ", 2);
+	ft_putstr_fd(file, 2);
+	ft_putendl_fd(": No such file or directory", 2);
+
 }

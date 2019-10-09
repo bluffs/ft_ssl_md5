@@ -6,12 +6,13 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/08 18:03:06 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/09 16:01:47 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 int	g_var[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
 	5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
@@ -106,6 +107,7 @@ char	*ft_hash_md5(char *str, int i, int j)
 	t_var			tab;
 	unsigned char	*str1;
 
+	//printf("str = %s\n", str);
 	init_tab(&tab);
 	str1 = ft_padding(str, &size);
 	while (size - i > 0)
