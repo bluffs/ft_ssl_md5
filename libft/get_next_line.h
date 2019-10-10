@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/21 08:58:36 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/08 17:35:08 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/10 17:31:40 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@
 # include "libft.h"
 # include "stdlib.h"
 
-typedef struct		s_rest
+typedef struct			s_rest
 {
 	int				fd;
 	char			*restes;
 	struct s_rest	*next;
-}					t_rest;
+}						t_rest;
 
 typedef struct			s_read
 {

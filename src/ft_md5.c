@@ -6,72 +6,64 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 18:01:25 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/09 16:01:00 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/10 19:16:39 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
 #include <stdlib.h>
-#include <stdio.h>
 
-void	ft_print_file_md5(char *str, char *hash, int flag)
+int		ft_flag(char c, int *p_flag, int *qr_flag)
 {
-	if (flag == 0)
+	if (c == 'p')
 	{
-		ft_putstr("MD5 (");
-		ft_putstr(str);
-		ft_putstr(") = ");
-		ft_putendl(hash);
+		(*p_flag)++;
+		return (1);
 	}
-	else if (flag == 1)
+	else if (c == 'q')
 	{
-		ft_putstr(hash);
-		ft_putstr(" ");
-		ft_putstr(str);
-		ft_putendl("");
+		*qr_flag = 2;
+		return (1);
 	}
-	else
-		ft_putendl(hash);
+	else if (c == 'r')
+	{
+		*qr_flag = (*qr_flag != 2) ? 1 : 2;
+		return (1);
+	}
+	return (0);
 }
 
-void	ft_print_md5(char *str, char *hash, int flag)
+void	ft_do_stdin(char c, int nb)
 {
-	if (flag == 0)
+	char	*str;
+
+	if (c == 'p' && nb == 1)
 	{
-		ft_putstr("MD5 (\"");
-		ft_putstr(str);
-		ft_putstr("\") = ");
-		ft_putendl(hash);
+		ft_read_file(NULL, &str, NULL, 0);
+		ft_print_md5(str, ft_hash_md5(str, 0, 0), 3);
 	}
-	else if (flag == 1)
+	else if (c == 'p' && nb == 0)
 	{
-		ft_putstr(hash);
-		ft_putstr(" \"");
-		ft_putstr(str);
-		ft_putendl("\"");
+		ft_read_file(NULL, &str, NULL, 0);
+		ft_print_md5(str, ft_hash_md5(str, 0, 0), 4);
 	}
-	else
-		ft_putendl(hash);
 }
 
 int		ft_flag_check(char **argv, int i, int *p_flag, int *qr_flag)
 {
 	int		n;
 
-	n = 1;
-	while (argv[i][n])
+	n = 0;
+	while (argv[i][++n])
 	{
-		if (argv[i][n] == 'p')
-			(*p_flag)++;
-		else if (argv[i][n] == 'q')
-			*qr_flag = 2;
-		else if (argv[i][n] == 'r')
-			*qr_flag = (*qr_flag != 2) ? 1 : 2;
+		if (ft_flag(argv[i][n], p_flag, qr_flag))
+			ft_do_stdin(argv[i][n], 1);
 		else if (argv[i][n] == 's')
 		{
 			if (argv[i][n + 1] != 0)
 			{
-				ft_print_md5(&argv[i][n + 1], ft_hash_md5(&argv[i][n + 1], 0, 0), *qr_flag);
+				ft_print_md5(&argv[i][n + 1], ft_hash_md5(&argv[i][n + 1],
+							0, 0), *qr_flag);
 				return (0);
 			}
 			else
@@ -82,40 +74,48 @@ int		ft_flag_check(char **argv, int i, int *p_flag, int *qr_flag)
 			ft_usage(argv[i][n]);
 			exit(0);
 		}
-		n++;
 	}
 	return (0);
 }
 
-void	md5(int argc, char **argv)
+int		ft_do_string(int argc, int *i, char **argv, int qr_flag)
 {
-	int	i;
+	if (*i + 1 < argc)
+	{
+		(*i)++;
+		ft_print_md5(argv[*i], ft_hash_md5(argv[*i], 0, 0), qr_flag);
+		return (1);
+	}
+	else
+	{
+		ft_usage(0);
+		return (0);
+	}
+}
+
+void	md5(int argc, char **argv, int i, int files)
+{
 	int	p_flag;
 	int	qr_flag;
-	int	files;
+	int	tmp;
 
-	files = 0;
 	p_flag = 0;
 	qr_flag = 0;
-	i = 1;
 	while (++i < argc)
 	{
 		if (files == 0 && argv[i][0] == '-')
 		{
-			if (ft_flag_check(argv, i, &p_flag, &qr_flag) == 1)
-			{
-				if (i + 1 < argc)
-				{
-					i++;
-					ft_print_md5(argv[i], ft_hash_md5(argv[i], 0, 0), qr_flag);
-				}
-			}
+			tmp = ft_flag_check(argv, i, &p_flag, &qr_flag);
+			if (tmp == 1)
+				p_flag += ft_do_string(argc, &i, argv, qr_flag);
 		}
 		else
 		{
 			files = 1;
-			if (ft_read_file(argv[i], &argv[0]) == 1)
+			if (ft_read_file(argv[i], &argv[0], NULL, 1) == 1)
 				ft_print_file_md5(argv[i], ft_hash_md5(argv[0], 0, 0), qr_flag);
 		}
 	}
+	if (p_flag == 0 && files == 0)
+		ft_do_stdin('p', 0);
 }

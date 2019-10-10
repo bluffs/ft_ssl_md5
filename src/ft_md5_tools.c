@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/09 16:01:47 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/10 15:22:30 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ char	*ft_hash_md5(char *str, int i, int j)
 	t_var			tab;
 	unsigned char	*str1;
 
-	//printf("str = %s\n", str);
 	init_tab(&tab);
 	str1 = ft_padding(str, &size);
 	while (size - i > 0)

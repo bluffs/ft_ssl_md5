@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 17:37:27 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/09 15:49:57 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/10 18:51:07 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,22 @@ void	ft_error_cmd(char *str)
 
 void	ft_usage(char c)
 {
-	ft_putstr_fd("md5: illegal option -- ", 2);
-	ft_putchar_fd(c, 2);
-	ft_putchar_fd('\n', 2);
+	if (c != 0)
+	{
+		ft_putstr_fd("md5: illegal option -- ", 2);
+		ft_putchar_fd(c, 2);
+		ft_putchar_fd('\n', 2);
+	}
+	else
+	{
+		ft_putendl_fd("md5: option requires an argument -- s", 2);
+	}
 	ft_putendl_fd("usage: md5 [-pqr] [-s string] [files ...]", 2);
 }
 
 void	ft_no_file(char *file)
 {
-	ft_putstr_fd("MD5: ", 2);
+	ft_putstr_fd("md5: ", 2);
 	ft_putstr_fd(file, 2);
 	ft_putendl_fd(": No such file or directory", 2);
-
 }
