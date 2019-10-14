@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 17:37:27 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/10 18:51:07 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/14 15:23:50 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,24 @@ void	ft_usage(char c)
 	ft_putendl_fd("usage: md5 [-pqr] [-s string] [files ...]", 2);
 }
 
+void	ft_usage_sha256(char c)
+{
+	if (c != 0)
+	{
+		ft_putstr_fd("sha256: illegal option -- ", 2);
+		ft_putchar_fd(c, 2);
+		ft_putchar_fd('\n', 2);
+	}
+	else
+	{
+		ft_putendl_fd("sha256: option requires an argument -- s", 2);
+	}
+	ft_putendl_fd("usage: sha256 [-pqr] [-s string] [files ...]", 2);
+}
+
 void	ft_no_file(char *file)
 {
-	ft_putstr_fd("md5: ", 2);
+	ft_putstr_fd("sha256: ", 2);
 	ft_putstr_fd(file, 2);
 	ft_putendl_fd(": No such file or directory", 2);
 }

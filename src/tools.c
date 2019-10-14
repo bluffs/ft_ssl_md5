@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:04:50 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/10 18:28:19 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/14 14:45:02 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ void		ft_do_cmd(int argc, char **argv)
 	if (ft_strcmp(argv[1], "md5") == 0)
 	{
 		md5(argc, argv, 1, 0);
+	}
+	else if (ft_strcmp(argv[1], "sha256") == 0)
+	{
+		sha256(argc, argv, 1, 0);
 	}
 	else
 	{
