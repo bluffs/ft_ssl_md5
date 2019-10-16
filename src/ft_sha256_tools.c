@@ -83,6 +83,11 @@ void	ft_operate_sha256(t_var *tab, unsigned char *str)
 	tab->h3 = tab->h3 + tab->d;*/
 }
 
+void	ft_init_msg(unsigned char *str)
+{
+	
+}
+
 char	*ft_hash_sha256(char *str, int i, int j)
 {
 	int				size;
@@ -91,7 +96,20 @@ char	*ft_hash_sha256(char *str, int i, int j)
 	unsigned char	*str1;
 
 	init_tab(&tab);
-	str1 = ft_padding(str, &size);
+	str1 = ft_padding_sha256(str, &size);
+	ft_init_msg(str1);
+	{
+		int n = 0;
+		while (n < 64)
+		{
+			ft_putnbr(n);
+			ft_putstr(". ");
+			ft_print_binary(&str1[n * 4]);
+			ft_putchar('\n');
+			n++;
+		}
+		ft_putchar('\n');
+	}
 	//testing block
 	/*{
 		int i = 0;

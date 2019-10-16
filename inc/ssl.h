@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:07:26 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/14 15:31:16 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/16 15:23:04 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ typedef struct	s_var
 	unsigned int				tmp;
 }				t_var;
 
+typedef struct	s_256
+{
+	
+}				t_256;
+
 typedef struct	s_elem
 {
 	char						*str;
@@ -50,6 +55,7 @@ void			ft_usage(char c);
 void			ft_usage_sha256(char c);
 char			ft_itoh(unsigned int nb);
 unsigned char	*ft_padding(char *str, int *size);
+unsigned char	*ft_padding_sha256(char *str, int *size);
 unsigned int	*ft_chunk(unsigned char *str, t_var *tab);
 void			ft_no_file(char *file);
 void			ft_print_file_md5(char *str, char *hash, int flag);
@@ -59,5 +65,6 @@ void			ft_print_sha256(char *str, char *hash, int flag);
 int				ft_flag_check(char **argv, int i, int *p_flag, int *qr_flag);
 char			*ft_final_print(t_var *tab);
 void			ft_reverse(unsigned int num, char *hash, int start);
+void			ft_print_binary(unsigned char *str);
 
 #endif

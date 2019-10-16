@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:04:50 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/14 14:45:02 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/15 18:48:18 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,25 @@ char		ft_itoh(unsigned int nb)
 
 	str = "0123456789abcdef";
 	return (str[nb]);
+}
+
+void		ft_print_binary(unsigned char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 8)
+		{
+			if (str[i] & (0b10000000 >> j))
+				ft_putchar('1');
+			else
+				ft_putchar('0');
+			j++;
+		}
+		i++;
+	}
 }

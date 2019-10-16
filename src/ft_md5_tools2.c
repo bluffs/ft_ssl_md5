@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:32:02 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/14 16:04:32 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/15 14:35:52 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,6 @@ unsigned char		*ft_padding(char *str, int *size)
 	tmp[i++] = (len >> 0) & 0xFF;
 	tmp[i++] = (len >> 8) & 0xFF;
 	tmp[i++] = (len >> 16) & 0xFF;
-		{
-		int n = 0;
-		int m = 3;
-		while (n < 64)
-		{
-			printf("n = %d : %X\n", n, ((unsigned int *)tmp)[n]);
-			n++;
-		}
-	}
 	tmp[i++] = (len >> 24) & 0xFF;
 	return (tmp);
 }
