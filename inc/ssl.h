@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:07:26 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/16 15:23:04 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/23 17:09:50 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,24 @@ typedef struct	s_var
 
 typedef struct	s_256
 {
-	
+	unsigned int				h0;
+	unsigned int				h1;
+	unsigned int				h2;
+	unsigned int				h3;
+	unsigned int				h4;
+	unsigned int				h5;
+	unsigned int				h6;
+	unsigned int				h7;
+	unsigned int				a;
+	unsigned int				b;
+	unsigned int				c;
+	unsigned int				d;
+	unsigned int				e;
+	unsigned int				f;
+	unsigned int				g;
+	unsigned int				h;
+	unsigned int				t1[32];
+	unsigned int				t2[32];	
 }				t_256;
 
 typedef struct	s_elem
@@ -51,6 +68,7 @@ int				ft_read_file(char *file, char **finalstr, char *str, int fd);
 char			*ft_hash_md5(char *str, int i, int j);
 char			*ft_hash_sha256(char *str, int i, int j);
 void			init_tab(t_var *tab);
+void			init_tab_sha256(t_256 *tab);
 void			ft_usage(char c);
 void			ft_usage_sha256(char c);
 char			ft_itoh(unsigned int nb);
