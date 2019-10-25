@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:07:26 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/23 17:09:50 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/25 16:31:06 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,9 @@ typedef struct	s_256
 	unsigned int				f;
 	unsigned int				g;
 	unsigned int				h;
-	unsigned int				t1[32];
-	unsigned int				t2[32];	
+	unsigned int				t1;
+	unsigned int				t2;	
+	unsigned int				k[64];
 }				t_256;
 
 typedef struct	s_elem
@@ -84,5 +85,13 @@ int				ft_flag_check(char **argv, int i, int *p_flag, int *qr_flag);
 char			*ft_final_print(t_var *tab);
 void			ft_reverse(unsigned int num, char *hash, int start);
 void			ft_print_binary(unsigned char *str);
+unsigned int	ft_get_unsigned(unsigned char *str);
+void			ft_set_unsigned(unsigned char *str, unsigned int nb);
+unsigned int	ft_big_sigma_zero(unsigned int x);
+unsigned int	ft_big_sigma_one(unsigned int x);
+unsigned int	ft_small_sigma_zero(unsigned int x);
+unsigned int	ft_small_sigma_one(unsigned int x);
+unsigned int 	ft_ch(unsigned int x, unsigned int y, unsigned int z);
+unsigned int	ft_maj(unsigned int x, unsigned int y, unsigned int z);
 
 #endif
