@@ -82,7 +82,7 @@ char	*ft_hash_sha256(char *str, int i, int j)
 
 	init_tab_sha256(&tab);
 	str1 = ft_padding_sha256(str, &size);
-	ft_init_msg(str1); //TODO this should be done for each block in the while loop
+	//ft_init_msg(str1); //TODO this should be done for each block in the while loop
 	/*{
 		int n = 0;
 		while (n < 64)
@@ -95,8 +95,10 @@ char	*ft_hash_sha256(char *str, int i, int j)
 		}
 		ft_putchar('\n');
 	}*/
+	//printf("size = %d\n", size);
 	while (size - i > 0)
 	{
+		//printf("1 BLOCK\n");
 		if (i != 0)
 			free(tmp);
 		if (!(tmp = ft_memalloc(65 * 4)))
@@ -107,7 +109,8 @@ char	*ft_hash_sha256(char *str, int i, int j)
 			tmp[j] = str1[i + j];
 			j++;
 		}
-		i += 64 * 4;
+		i += 16 * 4;
+		ft_init_msg(tmp);
 		ft_operate_sha256(&tab, tmp);
 	}
 	return (ft_final_print_256(&tab));

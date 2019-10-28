@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:07:26 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/26 16:41:20 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/28 14:02:19 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,6 @@ unsigned int	ft_small_sigma_one(unsigned int x);
 unsigned int 	ft_ch(unsigned int x, unsigned int y, unsigned int z);
 unsigned int	ft_maj(unsigned int x, unsigned int y, unsigned int z);
 void			ft_sha_to_hex(unsigned int num, char *hash, int start);
+int				ft_flag(char c, int *p_flag, int *qr_flag);
 
 #endif

@@ -1,4 +1,6 @@
 #include "../inc/ssl.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 void	ft_do_stdin_sha256(char c, int nb)
 {
@@ -14,6 +16,51 @@ void	ft_do_stdin_sha256(char c, int nb)
 		ft_read_file(NULL, &str, NULL, 0);
 		ft_print_sha256(str, ft_hash_sha256(str, 0, 0), 4);
 	}
+}
+
+/*void	ft_do_stdin_sha256(char c, int nb)
+{
+	char	*str;
+
+	if (c == 'p' && nb == 1)
+	{
+		ft_read_file(NULL, &str, NULL, 0);
+		ft_print_md5(str, ft_hash_md5(str, 0, 0), 3);
+	}
+	else if (c == 'p' && nb == 0)
+	{
+		ft_read_file(NULL, &str, NULL, 0);
+		ft_print_md5(str, ft_hash_md5(str, 0, 0), 4);
+	}
+}*/
+
+int		ft_flag_check_sha256(char **argv, int i, int *p_flag, int *qr_flag)
+{
+	int		n;
+
+	n = 0;
+	while (argv[i][++n])
+	{
+		if (ft_flag(argv[i][n], p_flag, qr_flag))
+			ft_do_stdin_sha256(argv[i][n], 1);
+		else if (argv[i][n] == 's')
+		{
+			if (argv[i][n + 1] != 0)
+			{
+				ft_print_sha256(&argv[i][n + 1], ft_hash_sha256(&argv[i][n + 1],
+							0, 0), *qr_flag);
+				return (0);
+			}
+			else
+				return (1);
+		}
+		else
+		{
+			ft_usage(argv[i][n]);
+			exit(0);
+		}
+	}
+	return (0);
 }
 
 int		ft_do_string_sha256(int argc, int *i, char **argv, int qr_flag)
@@ -43,7 +90,7 @@ void	sha256(int argc, char **argv, int i, int files)
 	{
 		if (files == 0 && argv[i][0] == '-')
 		{
-			tmp = ft_flag_check(argv, i, &p_flag, &qr_flag);
+			tmp = ft_flag_check_sha256(argv, i, &p_flag, &qr_flag);
 			if (tmp == 1)
 				p_flag += ft_do_string_sha256(argc, &i, argv, qr_flag);
 		}
