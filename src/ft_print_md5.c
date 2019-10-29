@@ -6,11 +6,12 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 18:47:12 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/10 19:15:27 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/29 13:22:17 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
+#include <stdlib.h>
 
 void	ft_print_file_md5(char *str, char *hash, int flag)
 {
@@ -30,6 +31,8 @@ void	ft_print_file_md5(char *str, char *hash, int flag)
 	}
 	else
 		ft_putendl(hash);
+	if (hash != NULL)
+		free(hash);
 }
 
 void	ft_print_md5(char *str, char *hash, int flag)
@@ -55,4 +58,6 @@ void	ft_print_md5(char *str, char *hash, int flag)
 	}
 	else
 		ft_putendl(hash);
+	if (hash != NULL)
+		free(hash);
 }

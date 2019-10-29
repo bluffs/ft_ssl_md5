@@ -6,13 +6,12 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:32:02 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/15 14:35:52 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/29 13:38:15 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 unsigned char		*ft_padding(char *str, int *size)
 {
@@ -48,7 +47,8 @@ unsigned int		*ft_chunk(unsigned char *str, t_var *tab)
 	int				j;
 	unsigned int	*test;
 
-	test = ft_memalloc(sizeof(int) * 16);
+	if (!(test = ft_memalloc(sizeof(int) * 16)))
+		exit(0);
 	i = 0;
 	while (i < 16)
 	{

@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_sha256.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/29 13:42:37 by jyakdi            #+#    #+#             */
+/*   Updated: 2019/10/29 13:48:49 by jyakdi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/ssl.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 void	ft_do_stdin_sha256(char c, int nb)
 {
@@ -17,22 +28,6 @@ void	ft_do_stdin_sha256(char c, int nb)
 		ft_print_sha256(str, ft_hash_sha256(str, 0, 0), 4);
 	}
 }
-
-/*void	ft_do_stdin_sha256(char c, int nb)
-{
-	char	*str;
-
-	if (c == 'p' && nb == 1)
-	{
-		ft_read_file(NULL, &str, NULL, 0);
-		ft_print_md5(str, ft_hash_md5(str, 0, 0), 3);
-	}
-	else if (c == 'p' && nb == 0)
-	{
-		ft_read_file(NULL, &str, NULL, 0);
-		ft_print_md5(str, ft_hash_md5(str, 0, 0), 4);
-	}
-}*/
 
 int		ft_flag_check_sha256(char **argv, int i, int *p_flag, int *qr_flag)
 {
@@ -98,7 +93,8 @@ void	sha256(int argc, char **argv, int i, int files)
 		{
 			files = 1;
 			if (ft_read_file(argv[i], &argv[0], NULL, 1) == 1)
-				ft_print_file_sha256(argv[i], ft_hash_sha256(argv[0], 0, 0), qr_flag);
+				ft_print_file_sha256(argv[i],
+						ft_hash_sha256(argv[0], 0, 0), qr_flag);
 		}
 	}
 	if (p_flag == 0 && files == 0)

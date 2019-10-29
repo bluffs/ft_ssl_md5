@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_sha256.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/29 13:44:03 by jyakdi            #+#    #+#             */
+/*   Updated: 2019/10/29 13:44:09 by jyakdi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/ssl.h"
+#include <stdlib.h>
 
 void	ft_sha_to_hex(unsigned int num, char *hash, int start)
 {
@@ -33,6 +46,8 @@ void	ft_print_file_sha256(char *str, char *hash, int flag)
 	}
 	else
 		ft_putendl(hash);
+	if (hash)
+		free(hash);
 }
 
 void	ft_print_sha256(char *str, char *hash, int flag)
@@ -58,4 +73,6 @@ void	ft_print_sha256(char *str, char *hash, int flag)
 	}
 	else
 		ft_putendl(hash);
+	if (hash)
+		free(hash);
 }

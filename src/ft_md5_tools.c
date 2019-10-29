@@ -6,13 +6,12 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:22:46 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/15 18:50:17 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/29 13:50:04 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 int	g_var[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
 	5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
@@ -53,8 +52,8 @@ void	ft_operate(t_var *tab, unsigned char *str)
 
 	x = 0;
 	test = ft_chunk(str, tab);
-	i = 0;
-	while (i < 64)
+	i = -1;
+	while (++i < 64)
 	{
 		ft_round(i, &f, &g, tab);
 		x = (tab->a + f + test[g] + tab->k[i]);
@@ -64,12 +63,12 @@ void	ft_operate(t_var *tab, unsigned char *str)
 		tab->a = tab->d;
 		tab->d = tab->c;
 		tab->c = x;
-		i++;
 	}
 	tab->h0 = tab->h0 + tab->a;
 	tab->h1 = tab->h1 + tab->b;
 	tab->h2 = tab->h2 + tab->c;
 	tab->h3 = tab->h3 + tab->d;
+	free(test);
 }
 
 void	ft_reverse(unsigned int num, char *hash, int start)
@@ -115,14 +114,16 @@ char	*ft_hash_md5(char *str, int i, int j)
 			free(tmp);
 		if (!(tmp = ft_memalloc(65)))
 			exit(0);
-		j = 0;
-		while (j < 64)
-		{
+		j = -1;
+		while (++j < 64)
 			tmp[j] = str1[i + j];
-			j++;
-		}
 		i += 64;
 		ft_operate(&tab, tmp);
+	}
+	if (size != 0)
+	{
+		free(tmp);
+		free(str1);
 	}
 	return (ft_final_print(&tab));
 }

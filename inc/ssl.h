@@ -6,7 +6,7 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 16:07:26 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/28 14:02:19 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/29 13:47:10 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct	s_256
 	unsigned int				g;
 	unsigned int				h;
 	unsigned int				t1;
-	unsigned int				t2;	
+	unsigned int				t2;
 	unsigned int				k[64];
 }				t_256;
 
@@ -91,9 +91,11 @@ unsigned int	ft_big_sigma_zero(unsigned int x);
 unsigned int	ft_big_sigma_one(unsigned int x);
 unsigned int	ft_small_sigma_zero(unsigned int x);
 unsigned int	ft_small_sigma_one(unsigned int x);
-unsigned int 	ft_ch(unsigned int x, unsigned int y, unsigned int z);
+unsigned int	ft_ch(unsigned int x, unsigned int y, unsigned int z);
 unsigned int	ft_maj(unsigned int x, unsigned int y, unsigned int z);
 void			ft_sha_to_hex(unsigned int num, char *hash, int start);
 int				ft_flag(char c, int *p_flag, int *qr_flag);
+unsigned int	ft_rotr(unsigned int x, int n);
+unsigned int	ft_shr(unsigned int x, int n);
 
 #endif

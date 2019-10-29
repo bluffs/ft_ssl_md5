@@ -6,12 +6,11 @@
 /*   By: jyakdi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 15:16:09 by jyakdi            #+#    #+#             */
-/*   Updated: 2019/10/16 15:11:59 by jyakdi           ###   ########.fr       */
+/*   Updated: 2019/10/29 13:35:15 by jyakdi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ssl.h"
-
 #include <math.h>
 
 void	init_tab(t_var *tab)
